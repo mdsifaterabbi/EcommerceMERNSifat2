@@ -1,0 +1,36 @@
+.contactBorderRight {
+    position: relative;
+}
+
+.contactBorderRight::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    border-right: 5px solid gray;
+    height: 50%;
+    /* 50% of the parent div's height */
+    transform: translateY(-50%);
+    /* Vertically center the border */
+
+}
+
+.contactUsTitle {
+    position: relative;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -25%);
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* background-color: purple; */
+    display: inline-block;
+
+    /* color: gray;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 5px; */
+
+}
