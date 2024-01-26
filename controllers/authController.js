@@ -2,6 +2,7 @@ import { comparePassword, hashPassword } from "../helpers/authHelper.js";
 import userModel from "../models/userModel.js";
 import JWT from "jsonwebtoken";
 
+
 export const registerController = async (req, res) => {
     try {
 
@@ -83,8 +84,10 @@ export const loginController = async (req, res) => {
             user: user.name,
             email: user.email,
             role: user.role,
-            phone: user.phone, //new exrta
-            address: user.address, //new extra
+            phone: user.phone,
+            address: user.address,
+            password: user.password, //new line added
+            id: user._id, //new line added
             token
         });
 
@@ -136,4 +139,48 @@ export const testController = (req, res) => {
     res.send({
         message: "This is test route",
     });
+}
+
+export const findUserByEmailController = async (req, res) => {
+
+    try {
+        const { email } = req.body;
+        const user = await userModel.findOne({ email });
+        res.send({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.send({
+            success: false,
+            message: "Error occurred in findUserByEmailController",
+            error
+        });
+    }
+}
+
+export const userUpdateController = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { name, email, phone, address, answer } = req.body;
+
+        const updatedUser = await userModel.findByIdAndUpdate({ _id: id }, { name, email, phone, address, answer }, { new: true });
+
+        //put query here
+        res.send({
+            success: true,
+            message: "Data Updated Successfully",
+            updatedUser
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.send({
+            success: false,
+            message: 'Error occurred in userUpdateController',
+            error
+        });
+    }
 }

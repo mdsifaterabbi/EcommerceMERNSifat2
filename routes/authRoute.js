@@ -1,5 +1,5 @@
 import express from "express";
-import { forgotPasswordController, loginController, registerController, testController } from '../controllers/authController.js'
+import { findUserByEmailController, forgotPasswordController, loginController, registerController, testController, userUpdateController } from '../controllers/authController.js'
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 //router object
 const router = express.Router();
@@ -11,7 +11,11 @@ router.post('/register', registerController);
 //login route
 router.post('/login', loginController);
 
+//find user by email
+router.post('/user', findUserByEmailController);
 
+//update user information
+router.put('/user/update/:id', userUpdateController);
 
 //protected Route for user
 router.get('/user-auth', requireSignIn, (req, res) => {

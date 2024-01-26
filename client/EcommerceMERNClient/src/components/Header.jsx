@@ -13,12 +13,14 @@ import { Avatar, Badge, Button, Switch, Space } from 'antd';
 import { MinusOutlined, PlusOutlined, QuestionOutlined } from '@ant-design/icons';
 const ButtonGroup = Button.Group;
 import { AiTwotoneCarryOut } from "react-icons/ai";
+//import { useCurrentUser } from "../currentUserAPI";
 
 const Header = () => {
     const location = useLocation();
     const pathname = location.pathname;
     const navigate = useNavigate();
     const [auth, setAuth] = useAuth();
+    //const [currentUser] = useCurrentUser();
 
     const categories = useCategory();
     const [cart] = useCart();
@@ -121,7 +123,7 @@ const Header = () => {
                                             <div
                                                 className={`${styles.MyLink} ${styles2.myAction} px-[10px] py-[5px] mx-[3px] uppercase rounded-[5px] `}
                                             >
-                                                <button className="uppercase">{auth.user}</button>
+                                                <button className="uppercase">{auth?.user}</button>
                                                 <div
                                                     className={`shadow bg-base-100 rounded-box w-30 ${styles2.myAction2} `}
                                                 >
@@ -162,7 +164,7 @@ const Header = () => {
                                 <li><Link className={`${styles.MyLink} px-[10px] py-[5px] mx-[3px] uppercase `} to="/login">Login</Link></li></>) : (<>
 
                                     <div className="dropdown">
-                                        <li tabIndex={0} role="button" className={`${styles.MyLink} px-[10px] py-[5px] mx-[3px] uppercase rounded-[10px] text-red-600 `}>{auth?.role}</li>
+                                        <li tabIndex={0} role="button" className={`${styles.MyLink} px-[10px] py-[5px] mx-[3px] uppercase rounded-[10px] text-red-600 `}>{auth?.user}</li>
                                         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-30" >
                                             <li><Link className={`hover:bg-orange-400 hover:text-white`} onClick={handleLogout}>Logout</Link></li>
                                             <li><Link className={`hover:bg-orange-400 hover:text-white`} to={`/dashboard/${auth?.role === 1 ? "admin" : "user"}`}>Dashboard</Link></li>

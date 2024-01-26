@@ -81,8 +81,6 @@ const Register = () => {
 
                     <div>
                         <div className="flex items-center justify-between">
-
-
                         </div>
                         <div className="mt-2">
                             <input

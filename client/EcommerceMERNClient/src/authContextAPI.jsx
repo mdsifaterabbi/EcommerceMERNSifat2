@@ -35,6 +35,9 @@ const AuthContextProvider = ({ children }) => {
         }
         //eslint-disable-next-line
     }, [])
+
+
+
     return <AuthContextObj.Provider value={[auth, setAuth]}>
         {children}
     </AuthContextObj.Provider>
