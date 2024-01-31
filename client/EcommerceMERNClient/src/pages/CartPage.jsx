@@ -5,6 +5,7 @@ import Layout from "../layout/Layout"
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+
 // import orderModel from "../../../../models/orderModel";
 // import { json } from "express";
 
@@ -130,43 +131,23 @@ const CartPage = () => {
 
     const payment = async () => {
         try {
-            // const { data } = await axios.post("http://localhost:3000/api/v1/order/payment");
+            if (currentOrderId) {
 
-            const { data } = await axios.post(`http://localhost:3000/api/v1/order/payment/${currentOrderId}`);
+                //initiating payment for SSL commerz
+                const { data } = await axios.post(`http://localhost:3000/api/v1/order/payment/${currentOrderId}`);
 
-
-            if (data?.success) {
-                console.log(data.url);
-                console.log('My Transaction id is: ', data.tran_id);
-                console.log('My Order id is: ', data.orderId);
-                window.location.replace(data.url);
-
-                const res = await axios.post(`http://localhost:3000/api/v1/order/payment/success/${data.tran_id}/${data.orderId}`);
-
-                //console.log(res?.data?.message);
-                console.log(res?.data?.message);
-                console.log('Tr id is: ', res?.data?.tran_id);
-                console.log('Or id is: ', res?.data?.orderId);
-
-                const res_2 = await axios.put(`http://localhost:3000/api/v1/order/payment/success/${data.tran_id}/${data.orderId}`);
-
-                // if (res_2?.data?.success) {
-                //     //toast.success('Payment successful');
-                //     console.log("Updated");
-                // }
-                // else {
-                //     toast.error('Payment Not successful');
-                //     console.log('Payment not successful');
-                // }
-                // navigate(`http://localhost:8080/payment/success/${data.tran_id}`);
-
-
+                // console.log(data?.message);
+                // console.log(data?.orderId);
+                // console.log(data?.orderData);
+                // console.log(data?.data);
+                console.log(data?.url);
+                window.location.replace(data?.url);
 
             }
 
-            toast.success('Now you want to pay for order id ' + currentOrderId);
+
         } catch (error) {
-            console.log(error);
+            console.error('Error in payment:', error);
             toast.error("Error occurred in payment method in cartPage");
         }
     }
