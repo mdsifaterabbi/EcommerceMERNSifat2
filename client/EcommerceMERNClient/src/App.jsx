@@ -25,6 +25,7 @@ import ProductDetails from './pages/ProductDetails'
 import Categories from './pages/Categories'
 import CategoryWiseProducts from './pages/CategoryWiseProducts'
 import CartPage from './pages/CartPage'
+import PaymentSuccess from './pages/PaymentSuccess'
 
 
 function App() {
@@ -61,7 +62,7 @@ function App() {
 
         </Route>
         <Route path='/forgot-password' element={<ForgotPassword />} />
-
+        <Route path='/payment/success/:tran_id' element={<PaymentSuccess />} />
 
       </Routes>
     </>

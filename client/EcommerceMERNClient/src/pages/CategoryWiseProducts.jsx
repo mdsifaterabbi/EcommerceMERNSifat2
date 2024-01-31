@@ -3,7 +3,8 @@ import useCategory from "../hooks/useCategory"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import toast from "react-hot-toast"
+import { useCart } from "../CartContextAPI";
 
 const CategoryWiseProducts = () => {
     const categories = useCategory();
@@ -11,6 +12,8 @@ const CategoryWiseProducts = () => {
     const [category, setCategory] = useState([]);
     const params = useParams();
     const navigate = useNavigate();
+    const [cart, setCart] = useCart([]);
+
 
     const getProductsByCat = async () => {
         try {
@@ -84,7 +87,15 @@ const CategoryWiseProducts = () => {
                                                 <button onClick={() => navigate(`/product/${p?.slug}`)}>See Details</button>
                                             </div>
                                             <div className="badge badge-secondary">
-                                                <button>Add To Cart</button>
+                                                <button
+                                                    onClick={() => {
+                                                        setCart([...cart, p])
+                                                        localStorage.setItem('cart', JSON.stringify([...cart, p]));
+                                                        toast.success("Item Added to Cart")
+                                                    }}
+                                                >
+                                                    Add To Cart
+                                                </button>
                                             </div>
                                         </div>
 

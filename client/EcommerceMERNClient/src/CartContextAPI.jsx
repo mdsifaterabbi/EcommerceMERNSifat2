@@ -7,9 +7,10 @@ const CartContextObj = createContext(); //creating context object named as CartC
 
 const CartContextProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [currentOrderId, setCurrentOrderId] = useState('');
 
 
-    return <CartContextObj.Provider value={[cart, setCart]}>
+    return <CartContextObj.Provider value={[cart, setCart, currentOrderId, setCurrentOrderId]}>
         {children}
     </CartContextObj.Provider>
 }

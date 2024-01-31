@@ -5,10 +5,12 @@ import Layout from "../layout/Layout"
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+// import orderModel from "../../../../models/orderModel";
+// import { json } from "express";
 
 const CartPage = () => {
     const [auth, setAuth] = useAuth();
-    const [cart, setCart] = useCart();
+    const [cart, setCart, currentOrderId, setCurrentOrderId] = useCart();
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -19,6 +21,8 @@ const CartPage = () => {
     const [role, setRole] = useState('');
     const [id, setId] = useState('');
 
+    const [paymentButtonVisible, setPaymentButtonVisible] = useState(false);
+    // const [currentOrderId, setCurrentOrderId] = useState('');
 
     const getUserInfo = async () => {
         try {
@@ -82,6 +86,88 @@ const CartPage = () => {
             return total;
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const orderSubmit = async () => {
+
+        try {
+            if (paymentButtonVisible === false) {
+                const totalProducts = cart?.length;
+                const totalPrice = totalAmount();
+                const productsList = []; // Declare the array
+                {
+                    for (let i = 0; i < cart?.length; i++) {
+                        productsList.push(cart[i].name); // Populate the array
+                    }
+                }
+
+                const { data } = await axios.post('http://localhost:3000/api/v1/order/create-order', {
+                    "customerName": name,
+                    "customerEmail": email,
+                    "shippingAddress": address,
+                    "customerPhone": phone,
+                    "totalProducts": totalProducts,
+                    "totalPrice": totalPrice,
+                    "productsList": productsList,
+                });
+
+                if (data?.success) {
+                    setCurrentOrderId(data?.orderId);
+                    console.log("Order Id created: ", data?.orderId);
+                    toast.success("Order placed successfully!");
+                    setPaymentButtonVisible(true);
+                }
+            }
+
+
+        } catch (error) {
+            console.log("Error occurred in orderSubmit");
+            toast.error("Order did not placed successfully");
+        }
+
+    }
+
+    const payment = async () => {
+        try {
+            // const { data } = await axios.post("http://localhost:3000/api/v1/order/payment");
+
+            const { data } = await axios.post(`http://localhost:3000/api/v1/order/payment/${currentOrderId}`);
+
+
+            if (data?.success) {
+                console.log(data.url);
+                console.log('My Transaction id is: ', data.tran_id);
+                console.log('My Order id is: ', data.orderId);
+                window.location.replace(data.url);
+
+                const res = await axios.post(`http://localhost:3000/api/v1/order/payment/success/${data.tran_id}/${data.orderId}`);
+
+                //console.log(res?.data?.message);
+                console.log(res?.data?.message);
+                console.log('Tr id is: ', res?.data?.tran_id);
+                console.log('Or id is: ', res?.data?.orderId);
+
+                const res_2 = await axios.put(`http://localhost:3000/api/v1/order/payment/success/${data.tran_id}/${data.orderId}`);
+
+                // if (res_2?.data?.success) {
+                //     //toast.success('Payment successful');
+                //     console.log("Updated");
+                // }
+                // else {
+                //     toast.error('Payment Not successful');
+                //     console.log('Payment not successful');
+                // }
+                // navigate(`http://localhost:8080/payment/success/${data.tran_id}`);
+
+
+
+            }
+
+            toast.success('Now you want to pay for order id ' + currentOrderId);
+        } catch (error) {
+            console.log(error);
+            toast.error("Error occurred in payment method in cartPage");
         }
     }
 
@@ -160,7 +246,18 @@ const CartPage = () => {
                             navigate('/login', { state: "/cart" })
                         }}>Login to Add Shipping address</button></>)
                     }
-
+                    <hr />
+                    {
+                        auth?.token && paymentButtonVisible === false ? (
+                            <>
+                                <button className="btn btn-outline btn-sm mt-[10px]" onClick={() => { orderSubmit() }}>Place Order</button>
+                            </>) : ('')
+                    }
+                    {
+                        paymentButtonVisible === true ? (<>
+                            <button className="btn btn-outline btn-sm mt-[10px]" onClick={() => { payment() }}>Make Payment</button>
+                        </>) : ('')
+                    }
 
                 </div>
 

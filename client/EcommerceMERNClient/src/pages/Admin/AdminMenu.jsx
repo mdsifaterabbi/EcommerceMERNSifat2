@@ -7,6 +7,9 @@ const AdminMenu = () => {
                 <h1 className="text-center">Admin Menu</h1>
                 <ul className="menu rounded-box text-center min-w-max">
                     <li className="flex items-center justify-center text-red-600">
+                        <Link to="/dashboard/user/profile" className="text-center border-[1px] border-purple-600 m-[2px]">Profile</Link>
+                    </li>
+                    <li className="flex items-center justify-center text-red-600">
                         <Link to="/dashboard/admin/create-category" className="text-center border-[1px] border-purple-600 m-[2px]">Create Category</Link>
                     </li>
                     <li className="flex items-center justify-center text-red-600">

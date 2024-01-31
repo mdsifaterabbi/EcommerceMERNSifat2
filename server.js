@@ -7,13 +7,20 @@ import connectDB from "./Config/db.js";
 import router from './routes/authRoute.js'
 import categoryRouter from './routes/categoryRoute.js'
 import productRouter from './routes/productRoute.js'
+import orderRouter from './routes/orderRoute.js'
 import cors from 'cors';
+//const SSLCommerzPayment = require('sslcommerz-lts')
+import SSLCommerzPayment from "sslcommerz-lts"
 
 //configure dotenv
 dotenv.config();
 
 //database connection
 connectDB();
+
+const store_id = process.env.SSL_STORE_ID;
+const store_passwd = process.env.SSL_STORE_PASSWORD;
+const is_live = false //true for live, false for sandbox
 
 const PORT = process.env.PORT || 4000;
 
@@ -26,6 +33,7 @@ app.use(morgan('dev'));
 app.use("/api/v1/auth", router);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/order", orderRouter);
 
 //rest api
 app.get("/", (req, res) => {
