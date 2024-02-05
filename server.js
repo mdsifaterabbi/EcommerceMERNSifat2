@@ -4,30 +4,30 @@ const app = express();
 import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./Config/db.js";
-import router from './routes/authRoute.js'
-import categoryRouter from './routes/categoryRoute.js'
-import productRouter from './routes/productRoute.js'
-import orderRouter from './routes/orderRoute.js'
-import cors from 'cors';
+import router from "./routes/authRoute.js";
+import categoryRouter from "./routes/categoryRoute.js";
+import productRouter from "./routes/productRoute.js";
+import orderRouter from "./routes/orderRoute.js";
+import cors from "cors";
 //const SSLCommerzPayment = require('sslcommerz-lts')
-import SSLCommerzPayment from "sslcommerz-lts"
+import SSLCommerzPayment from "sslcommerz-lts";
 
 //configure dotenv
 dotenv.config();
 
-//database connection
-connectDB();
-
 const store_id = process.env.SSL_STORE_ID;
 const store_passwd = process.env.SSL_STORE_PASSWORD;
-const is_live = false //true for live, false for sandbox
+const is_live = false; //true for live, false for sandbox
+
+//database connection
+connectDB();
 
 const PORT = process.env.PORT || 4000;
 
 //middlewares
 app.use(cors());
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
 //routes [note: app.use() call the exported route]
 app.use("/api/v1/auth", router);
