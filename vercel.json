@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "/client/EcommerceMERNClient/src",
+        "use": "@vercel/react",
+        "config": {
+          "buildOutput": "public"
+        }
+      },
+      {
+        "src": "/",
+        "use": "@vercel/node",
+        "config": {
+          "buildCommand": "npm run dev"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/client/EcommerceMERNClient/public/*"
+      }
+    ]
+  }
