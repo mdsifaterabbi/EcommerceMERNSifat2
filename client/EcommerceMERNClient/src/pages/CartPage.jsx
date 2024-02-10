@@ -133,8 +133,6 @@ const CartPage = () => {
           setPaymentButtonVisible(true);
           setCurrentTranId(data?.transactionId);
         }
-
-        //***do rest of the payment code here */
       }
     } catch (error) {
       console.log("Error occurred in orderSubmit");
@@ -159,7 +157,7 @@ const CartPage = () => {
     <Layout>
       <h1 className="text-center text-3xl text-slate-500">Cart Page</h1>
       <div className="flex flex-row flex-wrap my-[50px] min-h-[70vh]">
-        <div className="basis-1/1 md:basis-1/6 md:border-r-[2px] border-slate-400 px-[10px] sm:text-sm md:text-lg w-[100vw] text-center">
+        <div className="basis-1/1 lg:basis-1/6 md:border-r-[1px] border-slate-400 px-[5px] sm:text-sm md:text-sm w-[100vw] text-center">
           Hello &nbsp;
           {auth?.token ? (
             <span className="badge badge-outline uppercase">{name}</span>
@@ -178,7 +176,54 @@ const CartPage = () => {
           )}
           <br></br>
         </div>
-        <div className="basis-3/6 px-[10px] md:border-r-[2px] border-slate-400 text-end">
+        {/*========= Cart items list details for extra small and small devices starts from here ===========*/}
+        <div className="bg-orange md:hidden basis-1/1">
+          <div>
+            <table className="table w-[250px]">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Photo</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart?.map((p) => (
+                  <tr key={p._id}>
+                    <td>
+                      {p.name.substring(0, 15)} &nbsp;<br></br>
+                      <div className="badge badge-primary">
+                        <button onClick={() => navigate(`/product/${p?.slug}`)}>
+                          Details
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      {
+                        <img
+                          src={`http://localhost:3000/api/v1/product/product-photo/${p._id}`}
+                          alt="photo"
+                          width="80px"
+                        />
+                      }
+                    </td>
+                    <td>
+                      <span className="badge badge-info">{p.price}</span>
+                      <button
+                        className="badge badge-sm badge-warning"
+                        onClick={() => removeCartItem(p._id)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {/*========= Cart items list details for medium and large device starts from here ===========*/}
+        <div className="hidden md:block basis-1/1 lg:basis-3/6 px-[10px] lg:border-r-[1px] border-slate-400 text-end">
           <div className="overflow-x-auto">
             <table className="table">
               {/* head */}
@@ -230,71 +275,145 @@ const CartPage = () => {
             </table>
           </div>
         </div>
-        <div className="basis-2/6 text-center">
-          <h2 className="text-center">Cart Summary</h2>
-          <p className="text-center">Total | Checkout | Payment</p>
-          <hr />
-          <h5 className="mt-[25px] ml-[20px] text-gray-700 text-center">
-            Total ={" "}
-            <span className="badge badge-outline">$ {totalAmount()}</span>{" "}
-          </h5>
-          <hr />
-          {auth?.token ? (
-            <>
-              <h5>
-                Shipping Address: &nbsp;
-                <span className="uppercase">{address}</span>
-              </h5>
-              <button
-                className="btn btn-outline btn-sm"
-                onClick={() => {
-                  navigate("/dashboard/user/profile");
-                }}
-              >
-                Change Address
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="btn btn-outline btn-sm"
-                onClick={() => {
-                  navigate("/login", { state: "/cart" });
-                }}
-              >
-                Login to Add Shipping address
-              </button>
-            </>
-          )}
-          <hr />
-          {auth?.token && paymentButtonVisible === false ? (
-            <>
-              <button
-                className="btn btn-outline btn-sm mt-[10px]"
-                onClick={() => {
-                  orderSubmit();
-                }}
-              >
-                Place Order
-              </button>
-            </>
-          ) : (
-            ""
-          )}
-          {paymentButtonVisible === true ? (
-            <>
-              <button
-                className="btn btn-outline btn-sm mt-[10px]"
-                onClick={() => {
-                  payment();
-                }}
-              >
-                Payment
-              </button>
-            </>
-          ) : (
-            ""
-          )}
+
+        <div className="basis-1/1 lg:basis-2/6 text-center md:text-left">
+          <div className="hidden md:block">
+            <h2 className="text-center md:text-left">Cart Summary</h2>
+            <p className="text-center md:text-left">
+              Total | Checkout | Payment
+            </p>
+            <hr />
+            <h5 className="mt-[25px] ml-[20px] md:ml-[0px] text-gray-700 text-center md:text-left">
+              Total ={" "}
+              <span className="badge badge-outline">$ {totalAmount()}</span>{" "}
+            </h5>
+
+            <hr />
+            {auth?.token ? (
+              <>
+                <h5>
+                  Shipping Address: &nbsp;
+                  <span className="uppercase">{address}</span>
+                </h5>
+                <button
+                  className="btn btn-outline btn-sm"
+                  onClick={() => {
+                    navigate("/dashboard/user/profile");
+                  }}
+                >
+                  Change Address
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="btn btn-outline btn-sm"
+                  onClick={() => {
+                    navigate("/login", { state: "/cart" });
+                  }}
+                >
+                  Login to Add Shipping address
+                </button>
+              </>
+            )}
+            <hr />
+            {auth?.token && paymentButtonVisible === false ? (
+              <>
+                <button
+                  className="btn btn-outline btn-sm mt-[10px]"
+                  onClick={() => {
+                    orderSubmit();
+                  }}
+                >
+                  Place Order
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+            {paymentButtonVisible === true ? (
+              <>
+                <button
+                  className="btn btn-outline btn-sm mt-[10px]"
+                  onClick={() => {
+                    payment();
+                  }}
+                >
+                  Payment
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+          {/* ========cart info for extra small and small devices starts============ */}
+          <div className="md:hidden w-[100vw]">
+            <h2 className="text-left">Cart Summary</h2>
+            <p className="text-left">Total | Checkout | Payment</p>
+            <hr />
+            <h5 className="mt-[10px] text-gray-700 text-left">
+              Total ={" "}
+              <span className="badge badge-outline">$ {totalAmount()}</span>{" "}
+            </h5>
+
+            <hr />
+            {auth?.token ? (
+              <>
+                <h5 className="text-left">
+                  Shipping Address: &nbsp;
+                  <span className="uppercase">{address}</span>
+                </h5>
+                <button
+                  className="btn btn-sm btn-outline relative left-[-25%]"
+                  onClick={() => {
+                    navigate("/dashboard/user/profile");
+                  }}
+                >
+                  Change Address
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="btn btn-outline btn-sm relative left-[-25%]"
+                  onClick={() => {
+                    navigate("/login", { state: "/cart" });
+                  }}
+                >
+                  Login to Add Shipping address
+                </button>
+              </>
+            )}
+            <hr />
+            {auth?.token && paymentButtonVisible === false ? (
+              <>
+                <button
+                  className="btn btn-outline btn-sm mt-[10px] relative left-[-25%]"
+                  onClick={() => {
+                    orderSubmit();
+                  }}
+                >
+                  Place Order
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+            {paymentButtonVisible === true ? (
+              <>
+                <button
+                  className="btn btn-outline btn-sm mt-[10px]"
+                  onClick={() => {
+                    payment();
+                  }}
+                >
+                  Payment
+                </button>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
       </div>
     </Layout>

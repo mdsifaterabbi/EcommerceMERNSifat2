@@ -19,9 +19,6 @@ const PaymentSuccess = () => {
     window.location.reload(false); //reload from the cache
   };
 
-  // useEffect(() => {
-  //   ResetOrderPage();
-  // }, []);
 
   const storedPaidItem = JSON.parse(localStorage.getItem("findPaidProducts"));
 
@@ -32,9 +29,7 @@ const PaymentSuccess = () => {
       const { data } = await axios.put(
         `http://localhost:3000/api/v1/order/update-payment-status/${tranId}`
       );
-      // if (data?.success) {
-      //   setPaymentSt(data?.paymentStatus);
-      // }
+   
       ResetOrderPage();
     } catch (error) {
       console.log(
@@ -43,9 +38,6 @@ const PaymentSuccess = () => {
     }
   };
 
-  // useEffect(() => {
-  //   updatePaymentStatus();
-  // }, [tranId]);
 
   return (
     <Layout>
@@ -99,11 +91,11 @@ const PaymentSuccess = () => {
         <div className="block sm:hidden px-[20px]">
           <h1 className="text-center mb-[5px]">Order Details</h1>
           <h3 className="bg-slate-800 py-[5px] pl-[5px] text-[14px] text-[#c7d6ed]">
-            Transaction id: {storedPaidItem?.tranId}
+            Tran id: {storedPaidItem?.tranId}
           </h3>
           <hr className="border-[1px] border-slate-300"></hr>
           <h3 className="bg-slate-600 text-[#c7d6ed] text-[14px] py-[5px] pl-[5px]">
-            order id is: {storedPaidItem?.orderId}
+            order id: {storedPaidItem?.orderId}
           </h3>
           <hr className="border-[1px] border-slate-300"></hr>
           <h3 className="bg-slate-800 text-[#c7d6ed] text-[14px] py-[5px] pl-[5px]">
@@ -116,11 +108,6 @@ const PaymentSuccess = () => {
           <hr className="border-[1px] border-slate-300"></hr>
           <h3 className="bg-slate-800 text-[#c7d6ed] text-[14px] py-[5px] pl-[5px]">
             Payment Status:
-            {/* {orderResult?.paymentStatus === 0 ? (
-              <span className="badge badge-warning">Not Paid</span>
-            ) : (
-              <span className="badge badge-success">Paid</span>
-            )} */}
             {storedPaidItem?.paymentStatus}
           </h3>
           <hr className="border-[1px] border-slate-300"></hr>
@@ -185,7 +172,7 @@ const PaymentSuccess = () => {
               <thead>
                 <tr>
                   <th className="border border-r-[1px] border-slate-300 text-center bg-slate-600 text-white">
-                    Transaction Id
+                    Tran Id
                   </th>
                   <th className="border border-r-[1px] border-slate-300 text-center bg-slate-800 text-white">
                     Order Id
